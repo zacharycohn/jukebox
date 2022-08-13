@@ -121,8 +121,8 @@ class NFCReader(object):
 
 				#if no card is available.
 				if rawuid is None:
+					# pause sonos if a NFC tag is removed. 
 					if nfcActive == 1:
-						# pause sonos if a NFC tag is removed
 						print("NFC removed. Pausing Sonos.")
 						devices = {device.player_name: device for device in soco.discover()}
 						devices[speakerGroup[0]].pause()
@@ -130,6 +130,11 @@ class NFCReader(object):
 					else:
 						print("nothin' here " + time.strftime("%H:%M:%S", time.localtime()))
 						continue
+
+					# If you want to be able to remove the NFC tag without pausing the music.
+				# 	nfcActive = 0
+				# 	print("nothin' here " + time.strftime("%H:%M:%S", time.localtime()))
+				# 	continue
 
 		except Exception as e:
 			print(e)
