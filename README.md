@@ -3,6 +3,9 @@ Disclaimer: As I say frequently at work, I am not a software engineer. Some of t
 # Background
 This is a Raspberry Pi powered Jukebox that controls one or more Sonos speakers via NFC tags. 
 
+![Jukebox](https://github.com/zacharycohn/jukebox/blob/main/demoimage.jpeg)
+*(The lid fits, I just didn't attach it yet.)*
+
 Sometimes I find it inconvenient to pull out my phone/computer to control the music playing on my Sonos, so I decided to build an analog control interface.
 
 I used my Glowforge to lasercut a box and mounted it on the wall, then stuffed a Raspberry Pi 3B inside with an NFC shield. The musicBox.py code listens for an NFC tag (embedded in a jewel case), then plays the appropriate Pandora or Spotify playlist. 
@@ -11,6 +14,8 @@ I glued magnets in the jewel case and in the enclosure, so the jewel case snaps 
 
 This code is built to support multiple jukeboxes syncing to the same remote database.
 
+![Music Library](https://github.com/zacharycohn/jukebox/blob/main/musiclibrary.jpeg)
+
 # Setup
 ## Software:
 - pip3 install beautifulsoup4
@@ -18,7 +23,7 @@ This code is built to support multiple jukeboxes syncing to the same remote data
 - pip3 install pysftp
 - This repo comes with the pn532 package to control the NFC hat, but you can also find it on https://www.waveshare.com/wiki/PN532_NFC_HAT#Resources
 - Change the values of global variables to fit your Sonos setup and remote database URL.
-- Change the sftp info in syncLocalDBWithRemote() in musicBox.py and admin_musicBox.py
+- Change the sftp info in `syncLocalDBWithRemote()` in musicBox.py and admin_musicBox.py
 
 
 ## Hardware:
@@ -32,7 +37,7 @@ This code is built to support multiple jukeboxes syncing to the same remote data
 - Glue magnets in the jewel cases and in your enclosure for the pi/NFC reader
 - I used these NFC tags: https://www.amazon.com/gp/product/B07PC3YYM8/ref=crt_ewc_title_oth_1?ie=UTF8&psc=1&smid=A33CLVZLRZ5QMR
 
-# Use
+# Configuration and Usage
 ## Step 1:
 SSH into your raspberry pi. Either scp the contents of this repo to it or clone the repo directly there.
 
