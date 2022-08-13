@@ -24,6 +24,7 @@ This code is built to support multiple jukeboxes syncing to the same remote data
 - This repo comes with the pn532 package to control the NFC hat, but you can also find it on https://www.waveshare.com/wiki/PN532_NFC_HAT#Resources
 - Change the values of global variables to fit your Sonos setup and remote database URL.
 - Change the sftp info in `syncLocalDBWithRemote()` in musicBox.py and admin_musicBox.py
+- The database.txt file included in this repo is just an example. You'll want to replace it with your own NFC IDs, URIs, etc. You can just delete the contents - the admin script will populate it with the right formatting for you.
 
 
 ## Hardware:
