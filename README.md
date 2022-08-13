@@ -1,7 +1,7 @@
 Disclaimer: As I say frequently at work, I am not a software engineer. Some of the code contained herein is hacky and gross. This was a hobby project and a fun way to learn some more python, primarily via Googling and StackOverflow. Happy to receive constructive feedback about more efficient/proper ways to do things through Issues and PRs. There's a bit of debug code, a decent amount of commented out code, and some "project management" comments I'm leaving for educational purposes.
 
 # Background
-This is a Raspberry Pi powered Jukebox that controls one or more Sonos speakers via NFC tags. 
+This is a Raspberry Pi powered Jukebox that controls one or more Sonos speakers via NFC tags. [See a demo video of it in action.](https://youtube.com/shorts/HJCB1uUh_KM)
 
 ![Jukebox](https://github.com/zacharycohn/jukebox/blob/main/demoimage.jpeg)
 *(The lid fits, I just didn't attach it yet.)*
