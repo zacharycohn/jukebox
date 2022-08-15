@@ -35,6 +35,7 @@
 
 
 
+from operator import truediv
 import threading
 import time #this is only used for debug and SyncSchedule. If you aren't using SyncSchedule, this can be removed.
 
@@ -160,6 +161,9 @@ def main():
 	# uncomment if you want to sync with remote on a regular schedule. Important if you have multiple jukeboxes
 	#sync = SyncSchedule() 
 	reader = NFCReader()
+
+	while True:
+		continue
 
 
 def playNFCStream(nfcUID):
