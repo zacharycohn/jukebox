@@ -141,11 +141,11 @@ class NFCReader(object):
 			print(e)
 			with open("errorlog.txt", "a") as dbFile:
 				dbFile.write(time.strftime("%H:%M:%S", time.localtime()))
+				dbFile.write(": ")
 				dbFile.write(str(e))
 				dbFile.write("\n\n*****************\n\n")
 		finally:
 			GPIO.cleanup()
-
 
 
 
