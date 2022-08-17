@@ -38,6 +38,7 @@
 from operator import truediv
 import threading
 import time #this is only used for debug and SyncSchedule. If you aren't using SyncSchedule, this can be removed.
+import os
 
 ## Control the Sonos with python: https://github.com/SoCo/SoCo
 import soco 
@@ -117,14 +118,16 @@ class NFCReader(object):
 
 					uid = uid[:-1]
 					nfcActive = 1
-					print("found a card: " + uid)
+					#print("found a card: " + uid)
+					writeActivityLog("found a card" + uid)
 					playNFCStream(uid)
 
 				#if no card is available.
 				if rawuid is None:
 					# pause sonos if a NFC tag is removed. 
 					if nfcActive == 1:
-						print("NFC removed. Pausing Sonos.")
+						#print("NFC removed. Pausing Sonos.")
+						writeActivityLog("NFC removed. Pausing Sonos.")
 						devices = {device.player_name: device for device in soco.discover()}
 						devices[speakerGroup[0]].pause()
 						nfcActive = 0
@@ -144,6 +147,7 @@ class NFCReader(object):
 				dbFile.write(": ")
 				dbFile.write(str(e))
 				dbFile.write("\n\n*****************\n\n")
+			os.system('systemctl reboot -i')
 		finally:
 			GPIO.cleanup()
 
@@ -223,7 +227,8 @@ def playSpotifyPlaylist(playlists):
 
 
 	speaker.play_from_queue(0, start=True)
-	print("Playing the Spotify playlist.")
+	#print("Playing the Spotify playlist.")
+	writeActivityLog("Playing the Spotify playlist: " + playlists[2])
 
 def playPandoraPlaylist(playlists):
 	speaker = getSpeaker()
@@ -234,7 +239,8 @@ def playPandoraPlaylist(playlists):
 
 	speaker.play_uri(media_uri, media_metadata, start=True)
 
-	print("Playing your Pandora jams")
+	#print("Playing your Pandora jams")
+	writeActivityLog("Playing your Pandora jams" + playlists[2])
 
 
 # Maybe delete this since it lives in the admin script now? 
@@ -273,6 +279,13 @@ def playPandoraPlaylist(playlists):
 # 	speaker = getSpeaker()
 # 	info = speaker.get_current_track_info()
 # 	print ("Now listening to: " + info["title"] + " by " + info["artist"] + " on " + speakerGroup[0] + " speaker.")
+
+def writeActivityLog(msg)
+	with open("activitylog.txt", "a") as dbFile:
+		dbFile.write(time.strftime("%H:%M:%S", time.localtime()))
+		dbFile.write(": ")
+		dbFile.write(msg)
+		dbFile.write("\n\n*****************\n\n")
 
 def identifyService(playlists):
 	result = playlists[1]
