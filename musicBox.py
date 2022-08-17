@@ -119,7 +119,7 @@ class NFCReader(object):
 					uid = uid[:-1]
 					nfcActive = 1
 					#print("found a card: " + uid)
-					writeActivityLog("found a card" + uid)
+					writeActivityLog("found a card: " + uid)
 					playNFCStream(uid)
 
 				#if no card is available.
@@ -159,7 +159,7 @@ class NFCReader(object):
 def main():
 	# the sleep is not necessary, but since the program auto-runs when you log into the pi, i found it useful to give myself
 	# some time to kill the program when SSH'ing in.
-	time.sleep(5) 
+	time.sleep(3) 
 
 	syncWithRemoteDB()
 	# uncomment if you want to sync with remote on a regular schedule. Important if you have multiple jukeboxes
@@ -228,7 +228,7 @@ def playSpotifyPlaylist(playlists):
 
 	speaker.play_from_queue(0, start=True)
 	#print("Playing the Spotify playlist.")
-	writeActivityLog("Playing the Spotify playlist: " + playlists[2])
+	writeActivityLog("Playing Spotify: " + playlists[2])
 
 def playPandoraPlaylist(playlists):
 	speaker = getSpeaker()
@@ -240,7 +240,7 @@ def playPandoraPlaylist(playlists):
 	speaker.play_uri(media_uri, media_metadata, start=True)
 
 	#print("Playing your Pandora jams")
-	writeActivityLog("Playing your Pandora jams" + playlists[2])
+	writeActivityLog("Playing Pandora: " + playlists[2])
 
 
 # Maybe delete this since it lives in the admin script now? 
@@ -280,12 +280,11 @@ def playPandoraPlaylist(playlists):
 # 	info = speaker.get_current_track_info()
 # 	print ("Now listening to: " + info["title"] + " by " + info["artist"] + " on " + speakerGroup[0] + " speaker.")
 
-def writeActivityLog(msg)
+def writeActivityLog(msg):
 	with open("activitylog.txt", "a") as dbFile:
 		dbFile.write(time.strftime("%H:%M:%S", time.localtime()))
 		dbFile.write(": ")
 		dbFile.write(msg)
-		dbFile.write("\n\n*****************\n\n")
 
 def identifyService(playlists):
 	result = playlists[1]
