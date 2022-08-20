@@ -130,7 +130,7 @@ class NFCReader(object):
 						# if it's already paused or stopped, don't do anything
 						devices = {device.player_name: device for device in soco.discover()}
 						deviceStatus = devices[speakerGroup[0]].get_current_transport_info()
-						if deviceStatus == "PAUSED_PLAYBACK" OR deviceStatus == "STOPPED":
+						if deviceStatus == "PAUSED_PLAYBACK" or deviceStatus == "STOPPED":
 							continue
 						# pause the speakers
 						else:
