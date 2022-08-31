@@ -39,6 +39,7 @@ from operator import truediv
 import threading
 import time #this is only used for debug and SyncSchedule. If you aren't using SyncSchedule, this can be removed.
 import os
+import sys
 
 ## Control the Sonos with python: https://github.com/SoCo/SoCo
 import soco 
@@ -108,6 +109,8 @@ class NFCReader(object):
 				rawuid = pn532.read_passive_target(timeout=0.5)
 				#print('.', end="")
 
+				#print(time.strftime("%H:%M:%S", time.localtime()) + " nfcActive: " + str(nfcActive))
+				
 				#if there is a card and it hasn't taken an action on that card yet.
 				if rawuid is not None and nfcActive == 0:
 					for i in rawuid:
@@ -129,8 +132,10 @@ class NFCReader(object):
 					if nfcActive == 1:
 						# if it's already paused or stopped, don't do anything
 						devices = {device.player_name: device for device in soco.discover()}
-						deviceStatus = devices[speakerGroup[0]].get_current_transport_info()
+						deviceStatus = devices["Kitchen"].get_current_transport_info()["current_transport_state"]
+						#print(deviceStatus + "\n")
 						if deviceStatus == "PAUSED_PLAYBACK" or deviceStatus == "STOPPED":
+							nfcActive = 0
 							continue
 						# pause the speakers
 						else:
@@ -153,6 +158,8 @@ class NFCReader(object):
 				dbFile.write(time.strftime("%H:%M:%S", time.localtime()))
 				dbFile.write(": ")
 				dbFile.write(str(e))
+				dbFile.write("\n")
+				dbFile.write(sys.exc_info()[2])
 				dbFile.write("\n\n*****************\n\n")
 			os.system('systemctl reboot -i')
 		finally:
@@ -292,6 +299,7 @@ def writeActivityLog(msg):
 		dbFile.write(time.strftime("%H:%M:%S", time.localtime()))
 		dbFile.write(": ")
 		dbFile.write(msg)
+		dbFile.write("\n")
 
 def identifyService(playlists):
 	result = playlists[1]
