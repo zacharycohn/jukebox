@@ -54,11 +54,12 @@ import requests
 import RPi.GPIO as GPIO
 from pn532 import *
 
+defaultSpeakerGroup = ["Kitchen", "Living Room"]
 speakerGroup = ["Kitchen", "Living Room"] # the Sonos names of the speakers you want to use
 databaseFile = "database.txt" # name of the local database text file
 # You could remove remoteDB code out if you don't want to sync multiple devices/sync db off your raspberry pi.
 remoteDBUrl = 'https://zaccohn.com/misc/audio/musicbox/database.txt' #URL of the remote database text file. 
-
+defaultVolume = 20
 
 # Uncomment when there are multiple devices to keep in sync with remote database
 # also uncomment the line in main()
@@ -193,12 +194,18 @@ def playNFCStream(nfcUID):
 	x = 0
 	for i in playlists:
 		dbNFC = str(i[0]).lower()
-		
+
 		if dbNFC == nfcUID:
-			if identifyService(playlists[x]) == "spotify":
+			service = identifyService(playlists[x])
+
+			if service == "spotify":
 				playSpotifyPlaylist(playlists[x])
-			elif identifyService(playlists[x]) == "pandora":
+				resetSpeakerGroup()
+			elif service == "pandora":
 				playPandoraPlaylist(playlists[x])
+				resetSpeakerGroup()
+			elif service == "utility":
+				utilityControls(playlists[x])
 			else:
 				print("uhhhh whoops need to build this")
 			
@@ -227,6 +234,25 @@ def playNFCStream(nfcUID):
 	# 	playPandoraPlaylist(playlists[selection])
 	# else:
 	# 	print("uhhhh whoops need to build this")
+
+def utilityControls(playlists):
+	global defaultVolume
+	global speakerGroup
+	control = playlists[2].strip()
+
+	if control == "vol reset":
+		speaker = getSpeaker()
+		speaker.group.volume = defaultVolume
+	elif control == "vol down":
+		speaker = getSpeaker()
+		speaker.group.volume = (defaultVolume - 10)
+	elif control == "everywhere":
+		speakerGroup = ["Kitchen", "Living Room", "Den", "Bedroom", "Nursery", "Bathroom"]
+	elif control == "nursery":
+		speakerGroup = ["Nursery"]
+	elif control == "bathroom":
+		speakerGroup = ["Bathroom"]
+
 
 def playSpotifyPlaylist(playlists):
 
@@ -350,6 +376,11 @@ def setSpeakerGroup():
 					break
 		
 
+def resetSpeakerGroup():
+	global speakerGroup
+	global defaultSpeakerGroup
+	
+	speakerGroup = defaultSpeakerGroup
 
 
 
