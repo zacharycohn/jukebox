@@ -156,7 +156,7 @@ class NFCReader(object):
 		except Exception as e:
 			print(e)
 			with open("errorlog.txt", "a") as dbFile:
-				dbFile.write(time.strftime("%H:%M:%S", time.localtime()))
+				dbFile.write(time.strftime("%-m.%-d %H:%M:%S", time.localtime()))
 				dbFile.write(": ")
 				dbFile.write(str(e))
 				dbFile.write("\n")
@@ -248,10 +248,12 @@ def utilityControls(playlists):
 		speaker.group.volume = (defaultVolume - 10)
 	elif control == "everywhere":
 		speakerGroup = ["Kitchen", "Living Room", "Den", "Bedroom", "Nursery", "Bathroom"]
+		print("everywhere")
 	elif control == "nursery":
 		speakerGroup = ["Nursery"]
 	elif control == "bathroom":
 		speakerGroup = ["Bathroom"]
+		print("bathroom")
 
 
 def playSpotifyPlaylist(playlists):
@@ -352,9 +354,11 @@ def syncWithRemoteDB():
 def setSpeakerGroup():
 	global speakerGroup
 
+	print("357: " + str(speakerGroup))
 	# get a dict of devices
 	devices = {device.player_name: device for device in soco.discover()}
 	numOfSpeakersInGroup = len(devices[speakerGroup[0]].group.members)
+	print("361: " + numOfSpeakersInGroup)
 
 	# this is hacky, but if the main speaker is in a group
 	# that is the same size as the group it's supposed to be in, 
