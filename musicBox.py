@@ -358,7 +358,7 @@ def setSpeakerGroup():
 	# get a dict of devices
 	devices = {device.player_name: device for device in soco.discover()}
 	numOfSpeakersInGroup = len(devices[speakerGroup[0]].group.members)
-	print("361: " + numOfSpeakersInGroup)
+	print("361: " + str(numOfSpeakersInGroup))
 
 	# this is hacky, but if the main speaker is in a group
 	# that is the same size as the group it's supposed to be in, 
