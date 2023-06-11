@@ -38,7 +38,7 @@
 from operator import truediv
 import threading
 import time #this is only used for debug and SyncSchedule. If you aren't using SyncSchedule, this can be removed.
-import os
+# import os
 import sys
 
 ## Control the Sonos with python: https://github.com/SoCo/SoCo
@@ -93,6 +93,8 @@ class NFCReader(object):
 		nfcActive = 0
 		global speakerGroup
 
+		pn532 = None
+
 		try:
 			pn532 = PN532_SPI(debug=False, reset=20, cs=4)
 
@@ -103,7 +105,21 @@ class NFCReader(object):
 			pn532.SAM_configuration()
 
 			print('Waiting for RFID/NFC card...')
-			while True:
+		except Exception as e:
+			print(e)
+			with open("errorlog.txt", "a") as dbFile:
+				dbFile.write(time.strftime("%-m.%-d %H:%M:%S", time.localtime()))
+				dbFile.write(": initializing: ")
+				dbFile.write(str(e))
+				dbFile.write("\n")
+				dbFile.write(sys.exc_info()[2])
+				dbFile.write("\n\n*****************\n\n")
+		#finally:
+		#	GPIO.cleanup()
+
+
+		while True:
+			try:
 				uid = ""
 
 				# Check if a card is available to read
@@ -153,21 +169,14 @@ class NFCReader(object):
 				# 	print("nothin' here " + time.strftime("%H:%M:%S", time.localtime()))
 				# 	continue
 
-		except Exception as e:
-			print(e)
-			with open("errorlog.txt", "a") as dbFile:
-				dbFile.write(time.strftime("%-m.%-d %H:%M:%S", time.localtime()))
-				dbFile.write(": ")
-				dbFile.write(str(e))
-				dbFile.write("\n")
-				dbFile.write(sys.exc_info()[2])
-				dbFile.write("\n\n*****************\n\n")
-			os.system('systemctl reboot -i')
-		finally:
-			GPIO.cleanup()
-
-
-
+			except Exception as e:
+				print(e)
+				with open("errorlog.txt", "a") as dbFile:
+					dbFile.write(time.strftime("%-m.%-d %H:%M:%S", time.localtime()))
+					dbFile.write(": active: ")
+					dbFile.write(str(e))
+					dbFile.write('/n')
+					continue
 
 
 
