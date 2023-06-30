@@ -92,6 +92,8 @@ class NFCReader(object):
 	def run(self):
 		nfcActive = 0
 		global speakerGroup
+		deviceName = "Kitchen"
+		nameFlipper = 1
 
 		pn532 = None
 
@@ -149,7 +151,7 @@ class NFCReader(object):
 					if nfcActive == 1:
 						# if it's already paused or stopped, don't do anything
 						devices = {device.player_name: device for device in soco.discover()}
-						deviceStatus = devices["Kitchen"].get_current_transport_info()["current_transport_state"]
+						deviceStatus = devices[deviceName].get_current_transport_info()["current_transport_state"]
 						#print(deviceStatus + "\n")
 						if deviceStatus == "PAUSED_PLAYBACK" or deviceStatus == "STOPPED":
 							nfcActive = 0
@@ -169,7 +171,16 @@ class NFCReader(object):
 				# 	print("nothin' here " + time.strftime("%H:%M:%S", time.localtime()))
 				# 	continue
 
-			except Exception as e:					
+			except Exception as e:
+				if str(e) == "The method or property \"pause\" can only be called/used on the coordinator in a group":
+					if nameFlipper == 1:
+						deviceName = "Living Room"
+						nameFlipper = 0
+					else:
+						deviceName = "Kitchen"
+						nameFlipper = 1
+
+
 				print(e)
 				with open("errorlog.txt", "a") as dbFile:
 					dbFile.write(time.strftime("%-m.%-d %H:%M:%S", time.localtime()))
