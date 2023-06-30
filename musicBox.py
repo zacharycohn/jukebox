@@ -169,13 +169,13 @@ class NFCReader(object):
 				# 	print("nothin' here " + time.strftime("%H:%M:%S", time.localtime()))
 				# 	continue
 
-			except Exception as e:
+			except Exception as e:					
 				print(e)
 				with open("errorlog.txt", "a") as dbFile:
 					dbFile.write(time.strftime("%-m.%-d %H:%M:%S", time.localtime()))
 					dbFile.write(": active: ")
 					dbFile.write(str(e))
-					dbFile.write('/n')
+					dbFile.write('\n\n')
 					continue
 
 
